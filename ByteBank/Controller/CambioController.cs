@@ -27,7 +27,7 @@ namespace ByteBank.Controller
 
             return textoResultado;
         }
-        
+
         public string USD()
         {
             var valorFinal = _cambioService.Calcular("USD", "BRL", 1);
@@ -37,5 +37,27 @@ namespace ByteBank.Controller
 
             return textoResultado;
         }
+
+        public string Calculo(string moedaOrigem, string moedaDestino, decimal valor)
+        {
+            var valorFinal = _cambioService.Calcular("USD", "BRL", 1);
+            var textoPagina = View();
+
+            //VALOR_MOEDA_ORIGEM MOEDA_ORIGEM = VAALOR_MOEDA_DESTINO MOEDA_DESTINO
+
+            var textoResultado = textoPagina
+                .Replace("VALOR_MOEDA_ORIGEM", valor.ToString())
+                .Replace("VAALOR_MOEDA_DESTINO", valorFinal.ToString())
+                .Replace("MOEDA_ORIGEM", moedaOrigem.ToString())
+                .Replace("MOEDA_DESTINO", moedaDestino.ToString());
+            
+            return textoResultado;
+        }
+
+        public string Calculo(string moedaDestino, decimal valor) =>
+            Calculo("BRL", moedaDestino, valor);
+        
+        public string Calculo(string moedaDestino) =>
+            Calculo("BRL", moedaDestino, 1);
     }
 }

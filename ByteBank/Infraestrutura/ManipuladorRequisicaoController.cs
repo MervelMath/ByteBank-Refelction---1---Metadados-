@@ -6,9 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ByteBank.Infraestrutura
-{
+{    
     public class ManipuladorRequisicaoController
     {
+        private readonly ActionBinder _actionBinder = new ActionBinder();
+
         public void Manipular(HttpListenerResponse resposta, string path)
         {
             var partes = path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
@@ -20,9 +22,10 @@ namespace ByteBank.Infraestrutura
             var controllerWrapper = Activator.CreateInstance("Bytebank", controlerNomeCompleto, new object[0]);
             var controller = controllerWrapper.Unwrap();
 
-            var methordInfo = controller.GetType().GetMethod(actionNome);
+            //var methordInfo = controller.GetType().GetMethod(actionNome);
+            var methodInfo = _actionBinder.ObterActionBindInfo(controller, path);
 
-            var resultadoAction = (string)methordInfo.Invoke(controller, new object[0]);
+            var resultadoAction = (string)methodInfo.Invoke(controller);
 
             var buffer = Encoding.UTF8.GetBytes(resultadoAction);
 

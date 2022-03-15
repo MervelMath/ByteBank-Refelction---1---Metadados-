@@ -44,6 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\CambioController.cs" />
+    <Compile Include="Infraestrutura\ActionBinder.cs" />
+    <Compile Include="Infraestrutura\ActionBindInfo.cs" />
+    <Compile Include="Infraestrutura\ArgumentoNomeValor.cs" />
     <Compile Include="Infraestrutura\ControllerBase.cs" />
     <Compile Include="Infraestrutura\ManipuladorRequisicaoArquivo.cs" />
     <Compile Include="Infraestrutura\ManipuladorRequisicaoController.cs" />
@@ -62,6 +65,7 @@
     <EmbeddedResource Include="View\Cambio\USD.html" />
     <EmbeddedResource Include="View\Cartoes\Credito.html" />
     <EmbeddedResource Include="View\Cartoes\Debito.html" />
+    <EmbeddedResource Include="View\Cambio\Calculo.html" />
     <Content Include="View\Home\Index.html" />
   </ItemGroup>
   <ItemGroup>
