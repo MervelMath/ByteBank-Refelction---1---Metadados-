@@ -15,7 +15,6 @@ namespace ByteBank.Infraestrutura
         {
             var partes = path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
             var controllerNome = partes[0];
-            var actionNome = partes[1];
 
             var controlerNomeCompleto = $"ByteBank.Controller.{controllerNome}Controller";
 
