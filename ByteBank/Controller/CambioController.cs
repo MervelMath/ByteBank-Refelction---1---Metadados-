@@ -41,17 +41,18 @@ namespace ByteBank.Controller
         public string Calculo(string moedaOrigem, string moedaDestino, decimal valor)
         {
             var valorFinal = _cambioService.Calcular("USD", "BRL", 1);
-            var textoPagina = View();
 
             //VALOR_MOEDA_ORIGEM MOEDA_ORIGEM = VAALOR_MOEDA_DESTINO MOEDA_DESTINO
 
-            var textoResultado = textoPagina
-                .Replace("VALOR_MOEDA_ORIGEM", valor.ToString())
-                .Replace("VAALOR_MOEDA_DESTINO", valorFinal.ToString())
-                .Replace("MOEDA_ORIGEM", moedaOrigem.ToString())
-                .Replace("MOEDA_DESTINO", moedaDestino.ToString());
-            
-            return textoResultado;
+            var modelo = new
+            {
+                MoedaDestino = moedaDestino,
+                ValorDestino = valorFinal,
+                MoedaOrigem = moedaOrigem,
+                ValorOrigem = valor
+            };
+
+            return View(modelo);
         }
 
         public string Calculo(string moedaDestino, decimal valor) =>
