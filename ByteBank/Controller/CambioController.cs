@@ -1,6 +1,8 @@
-﻿using ByteBank.Infraestrutura;
+﻿using ByteBank.Filtros;
+using ByteBank.Infraestrutura;
 using ByteBank.Service;
 using ByteBank.Service.Cambio;
+using ByteBank.Service.Cartao;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,52 +15,59 @@ namespace ByteBank.Controller
 {
     public class CambioController : ControllerBase
     {
+
         private ICambioService _cambioService;
-        public CambioController()
+        private ICartaoService _cartaoService;
+        public CambioController(ICambioService cambioService, ICartaoService cartaoService)
         {
-            _cambioService = new CambioTesteService();
+            _cambioService = cambioService;
+            _cartaoService = cartaoService;
         }
+
+        [ApenasHorarioComercialFiltro]
         public string MXN()
         {
             var valorFinal = _cambioService.Calcular("MXN", "BRL", 1);
-            var textoPagina = View();
-
-            var textoResultado = textoPagina.Replace("VALOR_EM_REAIS", valorFinal.ToString());
-
-            return textoResultado;
+            return View(new
+            {
+                Valor = valorFinal
+            });
         }
 
+        [ApenasHorarioComercialFiltro]
         public string USD()
         {
             var valorFinal = _cambioService.Calcular("USD", "BRL", 1);
-            var textoPagina = View();
-
-            var textoResultado = textoPagina.Replace("VALOR_EM_REAIS", valorFinal.ToString());
-
-            return textoResultado;
+            return View(new
+            {
+                Valor = valorFinal
+            });
         }
 
+        [ApenasHorarioComercialFiltro]
+        public string Calculo(string moedaDestino) =>
+            Calculo("BRL", moedaDestino, 1);
+
+        [ApenasHorarioComercialFiltro]
+        public string Calculo(string moedaDestino, decimal valor) =>
+            Calculo("BRL", moedaDestino, valor);
+
+        [ApenasHorarioComercialFiltro]
         public string Calculo(string moedaOrigem, string moedaDestino, decimal valor)
         {
-            var valorFinal = _cambioService.Calcular("USD", "BRL", 1);
-
-            //VALOR_MOEDA_ORIGEM MOEDA_ORIGEM = VAALOR_MOEDA_DESTINO MOEDA_DESTINO
+            var valorFinal = _cambioService.Calcular(moedaOrigem, moedaDestino, valor);
+            var cartaoPromocao = _cartaoService.ObterCartaoDeCreditoDeDestaque();
 
             var modelo = new
             {
                 MoedaDestino = moedaDestino,
                 ValorDestino = valorFinal,
                 MoedaOrigem = moedaOrigem,
-                ValorOrigem = valor
+                ValorOrigem = valor,
+                CartaoPromocao = cartaoPromocao
             };
 
             return View(modelo);
         }
-
-        public string Calculo(string moedaDestino, decimal valor) =>
-            Calculo("BRL", moedaDestino, valor);
-        
-        public string Calculo(string moedaDestino) =>
-            Calculo("BRL", moedaDestino, 1);
     }
 }
