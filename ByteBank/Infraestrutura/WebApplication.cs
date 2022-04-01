@@ -13,6 +13,13 @@ using System.Threading.Tasks;
 
 namespace ByteBank.Infraestrutura
 {
+    public class CartaoServiceTesteContainer : ICartaoService
+    {
+        string ICartaoService.ObterCartaoDeCreditoDeDestaque() => "Cartão de crédito. Teste de container.";
+
+        string ICartaoService.ObterCartaoDeDebitoDeDestaque() => "Cartão de débito. Teste de container.";
+
+    }
     public class WebApplication
     {
         private readonly string[] _prefixos;
@@ -35,8 +42,8 @@ namespace ByteBank.Infraestrutura
 
         public void Configurar()
         {
-            _container.Registrar(typeof(ICambioService), typeof(CambioTesteService));
-            _container.Registrar(typeof(ICartaoService), typeof(CartaoServiceTeste));
+            _container.Registrar<ICambioService, CambioTesteService>();
+            _container.Registrar<ICartaoService, CartaoServiceTeste>();
         }
 
         private void ManipularRequisicao()

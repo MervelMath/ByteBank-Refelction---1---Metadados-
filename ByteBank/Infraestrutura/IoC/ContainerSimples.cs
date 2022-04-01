@@ -22,6 +22,13 @@ namespace ByteBank.Infraestrutura.IoC
             _mapaDeTipos.Add(tipoOrigem, tipoDestino);
         }
 
+        public void Registrar<TOrigem, TDestino>() where TDestino : TOrigem
+        {
+            if (_mapaDeTipos.ContainsKey(typeof(TOrigem)))
+                throw new InvalidOperationException("Tipo já mapeado!");
+
+            _mapaDeTipos.Add(typeof(TOrigem), typeof(TDestino));
+        }
         private void VerificarHierarquiaOuLancarExcecao(Type tipoOrigem, Type tipoDestino)
         {
             //Verificar se tipoDestino herda ou implementa tipoOrigem
